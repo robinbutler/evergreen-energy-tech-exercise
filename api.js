@@ -1,5 +1,9 @@
 const fs = require("fs");
-const { calculateHeatLossFactor } = require("./utils/utils");
+const axios = require("axios");
+const {
+  calculateHeatLossFactor,
+  calculatePowerHeatLoss,
+} = require("./utils/utils");
 
 const readHouseJSON = (filepath) => {
   fs.readFile(`${filepath}`, { encoding: "utf8" }, function read(err, data) {
@@ -18,7 +22,28 @@ const readHouseJSON = (filepath) => {
       estimatedHeatLoss: calculateHeatLossFactor(house),
       degreeDays: null,
     }));
-    console.log(billingForm);
+    billingForm = Promise.all(
+      billingForm.map(async (house) => {
+        return {
+          ...house,
+          degreeDays: await fetchWeatherData(house.designRegion),
+        };
+      })
+    )
+      .then((billingForm) => {
+        billingForm = billingForm.map((house) => ({
+          ...house,
+          powerHeatLoss: parseInt(
+            calculatePowerHeatLoss(house.estimatedHeatLoss, house.degreeDays),
+            10
+          ),
+        }));
+        console.log(billingForm);
+      })
+      .catch(function (error) {
+        console.log(error);
+        return null;
+      });
   };
 
   const fetchWeatherData = (location) => {

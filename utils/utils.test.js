@@ -1,4 +1,4 @@
-const { calculateHeatLossFactor } = require("./utils");
+const { calculateHeatLossFactor, calculatePowerHeatLoss } = require("./utils");
 
 describe("calculateHeatLossFactor", () => {
   it("Output returns an interger result", () => {
@@ -46,5 +46,16 @@ describe("calculateHeatLossFactor", () => {
         insulationFactor: 2.0,
       })
     ).toBe(10000);
+  });
+});
+
+describe("calculatePowerHeatLoss", () => {
+  it("function returns an interger", () => {
+    expect(typeof calculatePowerHeatLoss(10000, 1000)).toBe("number");
+  });
+  it("function can handle multiple different input values", () => {
+    expect(calculatePowerHeatLoss(10, 2)).toBe(5);
+    expect(calculatePowerHeatLoss(2000, 25)).toBe(80);
+    expect(calculatePowerHeatLoss(1, 1)).toBe(1);
   });
 });

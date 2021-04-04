@@ -6,4 +6,8 @@ const calculateHeatLossFactor = (homeData) => {
   return heatLossFactor;
 };
 
-module.exports = { calculateHeatLossFactor };
+const calculatePowerHeatLoss = (heatLoss, degreeDays) => {
+  const powerHeatLoss = heatLoss / degreeDays;
+  return powerHeatLoss;
+};
+module.exports = { calculateHeatLossFactor, calculatePowerHeatLoss };
