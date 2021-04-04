@@ -38,7 +38,7 @@ const readHouseJSON = (filepath) => {
             10
           ),
         }));
-        console.log(billingForm);
+        parsePumpJSON("./heat-pumps.json", billingForm);
       })
       .catch(function (error) {
         console.log(error);
@@ -55,7 +55,6 @@ const readHouseJSON = (filepath) => {
       .then(({ data }) => {
         if (typeof data.location.degreeDays !== "undefined") {
           return parseInt(data.location.degreeDays, 10);
-        }
       })
       .catch(function (error) {
         return null;

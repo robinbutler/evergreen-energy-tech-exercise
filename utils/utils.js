@@ -10,4 +10,19 @@ const calculatePowerHeatLoss = (heatLoss, degreeDays) => {
   const powerHeatLoss = heatLoss / degreeDays;
   return powerHeatLoss;
 };
-module.exports = { calculateHeatLossFactor, calculatePowerHeatLoss };
+
+const costBreakDown = (packageCosts) => {
+  labels = packageCosts.map((label) => label.label);
+  costs = packageCosts.map((cost) => "£" + cost.cost);
+  result = {};
+
+  labels.forEach(function (label, i) {
+    result[label] = costs[i];
+  });
+  return result;
+};
+module.exports = {
+  calculateHeatLossFactor,
+  calculatePowerHeatLoss,
+  costBreakDown,
+};

@@ -1,4 +1,8 @@
-const { calculateHeatLossFactor, calculatePowerHeatLoss } = require("./utils");
+const {
+  calculateHeatLossFactor,
+  calculatePowerHeatLoss,
+  costBreakDown,
+} = require("./utils");
 
 describe("calculateHeatLossFactor", () => {
   it("Output returns an interger result", () => {
@@ -57,5 +61,42 @@ describe("calculatePowerHeatLoss", () => {
     expect(calculatePowerHeatLoss(10, 2)).toBe(5);
     expect(calculatePowerHeatLoss(2000, 25)).toBe(80);
     expect(calculatePowerHeatLoss(1, 1)).toBe(1);
+  });
+});
+
+describe("costBreakdown", () => {
+  const testData = [
+    {
+      label:
+        "Design & Supply of your Air Source Heat Pump System Components (5kW)",
+      cost: 3947,
+    },
+    {
+      label: "Installation of your Air Source Heat Pump and Hot Water Cylinder",
+      cost: 2900,
+    },
+    {
+      label: "Supply & Installation of your Homely Smart Thermostat",
+      cost: 150,
+    },
+    { label: "Supply & Installation of a new Consumer Unit", cost: 300 },
+    {
+      label: "MCS System Commissioning & HIES Insurance-backed Warranty",
+      cost: 1648,
+    },
+  ];
+  it("function returns an object", () => {
+    expect(typeof costBreakDown(testData)).toBe("object");
+  });
+  it("function returns correct values", () => {
+    expect(costBreakDown(testData)).toEqual({
+      "Design & Supply of your Air Source Heat Pump System Components (5kW)":
+        "£3947",
+      "Installation of your Air Source Heat Pump and Hot Water Cylinder":
+        "£2900",
+      "Supply & Installation of your Homely Smart Thermostat": "£150",
+      "Supply & Installation of a new Consumer Unit": "£300",
+      "MCS System Commissioning & HIES Insurance-backed Warranty": "£1648",
+    });
   });
 });
