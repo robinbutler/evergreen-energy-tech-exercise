@@ -3,6 +3,10 @@ const axios = require("axios");
 const {
   calculateHeatLossFactor,
   calculatePowerHeatLoss,
+  calculateHeatPump,
+  costBreakDown,
+  totalPlusVAT,
+  generateForm,
 } = require("./utils/utils");
 
 const readHouseJSON = (filepath) => {
@@ -11,10 +15,10 @@ const readHouseJSON = (filepath) => {
       throw err;
     }
     const housingData = data;
-    processHousesJSON(housingData);
+    processJSON(housingData);
   });
 
-  const processHousesJSON = (houses) => {
+  const processJSON = (houses) => {
     houses = JSON.parse(houses);
     let billingForm = houses.map((house) => ({
       submissionId: house.submissionId,
@@ -22,6 +26,7 @@ const readHouseJSON = (filepath) => {
       estimatedHeatLoss: calculateHeatLossFactor(house),
       degreeDays: null,
     }));
+
     billingForm = Promise.all(
       billingForm.map(async (house) => {
         return {
@@ -44,7 +49,8 @@ const readHouseJSON = (filepath) => {
         console.log(error);
         return null;
       });
-      const parsePumpJSON = (filepath, billingForm) =>
+
+    const parsePumpJSON = (filepath, billingForm) =>
       fs.readFile(
         `${filepath}`,
         { encoding: "utf8" },
@@ -74,11 +80,15 @@ const readHouseJSON = (filepath) => {
               return { ...house };
             }
           });
-          console.log(billingForm)
-        
-      )
-        
-    };
+          billingForm.map((house) => {
+            const outputForm = generateForm(house);
+            console.log(outputForm);
+            console.log(billingForm);
+            return outputForm;
+          });
+        }
+      );
+  };
 
   const fetchWeatherData = (location) => {
     return axios
@@ -89,6 +99,7 @@ const readHouseJSON = (filepath) => {
       .then(({ data }) => {
         if (typeof data.location.degreeDays !== "undefined") {
           return parseInt(data.location.degreeDays, 10);
+        }
       })
       .catch(function (error) {
         return null;
@@ -96,4 +107,6 @@ const readHouseJSON = (filepath) => {
   };
 };
 
-readHouseJSON("./data/houses.json");
+readHouseJSON("./houses.json");
+
+module.exports = { readHouseJSON };

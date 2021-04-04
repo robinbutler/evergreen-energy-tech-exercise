@@ -1,8 +1,10 @@
+const { it, expect } = require("@jest/globals");
 const {
   calculateHeatLossFactor,
   calculatePowerHeatLoss,
   costBreakDown,
   calculateHeatPump,
+  totalPlusVAT,
 } = require("./utils");
 
 describe("calculateHeatLossFactor", () => {
