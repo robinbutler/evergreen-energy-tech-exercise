@@ -44,7 +44,41 @@ const readHouseJSON = (filepath) => {
         console.log(error);
         return null;
       });
-  };
+      const parsePumpJSON = (filepath, billingForm) =>
+      fs.readFile(
+        `${filepath}`,
+        { encoding: "utf8" },
+        function read(err, data) {
+          if (err) {
+            throw err;
+          }
+          const pumps = JSON.parse(data);
+          billingForm = billingForm.map((house) => {
+            if (house.degreeDays !== null) {
+              return {
+                ...house,
+                reccomendedHeatPump: calculateHeatPump(
+                  house.powerHeatLoss,
+                  pumps
+                ).label,
+                costs: costBreakDown(
+                  calculateHeatPump(house.powerHeatLoss, pumps).costs
+                ),
+                total:
+                  "£" +
+                  totalPlusVAT(
+                    calculateHeatPump(house.powerHeatLoss, pumps).costs
+                  ).toString(),
+              };
+            } else {
+              return { ...house };
+            }
+          });
+          console.log(billingForm)
+        
+      )
+        
+    };
 
   const fetchWeatherData = (location) => {
     return axios
