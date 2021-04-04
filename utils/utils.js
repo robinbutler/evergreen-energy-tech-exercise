@@ -21,8 +21,22 @@ const costBreakDown = (packageCosts) => {
   });
   return result;
 };
+
+const calculateHeatPump = (heatloss, heatPumps) => {
+  let reccomendedPump = { outputCapacity: 20 };
+  heatPumps.forEach((pump) => {
+    if (
+      pump.outputCapacity <= reccomendedPump.outputCapacity &&
+      pump.outputCapacity >= heatloss
+    )
+      reccomendedPump = pump;
+  });
+  return reccomendedPump;
+};
+
 module.exports = {
   calculateHeatLossFactor,
   calculatePowerHeatLoss,
   costBreakDown,
+  calculateHeatPump,
 };
