@@ -43,7 +43,7 @@ const readHouseJSON = (filepath) => {
             10
           ),
         }));
-        parsePumpJSON("./heat-pumps.json", billingForm);
+        parsePumpJSON("data/heat-pumps.json", billingForm);
       })
       .catch(function (error) {
         console.log(error);
@@ -83,7 +83,6 @@ const readHouseJSON = (filepath) => {
           billingForm.map((house) => {
             const outputForm = generateForm(house);
             console.log(outputForm);
-            console.log(billingForm);
             return outputForm;
           });
         }
@@ -107,6 +106,6 @@ const readHouseJSON = (filepath) => {
   };
 };
 
-readHouseJSON("./houses.json");
+readHouseJSON("data/houses.json");
 
 module.exports = { readHouseJSON };
